@@ -67,7 +67,7 @@ Dizajn sučelja i interakcija iterativni je postupak koji uključuje faze _dizaj
 
 ### Projektni zadaci
 
-1. [Idea Pitch](https://hci.mario-cagalj.from.hr/projektni-zadaci/1)
+1. [Idea Pitch](https://github.com/kmustapic/HCI-project-2025-26/tree/main/assignments/assignment-1-idea-pitch)
 2. [User Personas and Information Architecture](https://hci.mario-cagalj.from.hr/projektni-zadaci/2)
 3. [Next.js - Deploying an Application](https://hci.mario-cagalj.from.hr/projektni-zadaci/3)
 4. [Low/High-fidelity Prototypes](https://hci.mario-cagalj.from.hr/projektni-zadaci/4)

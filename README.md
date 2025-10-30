@@ -25,7 +25,7 @@
 ### Semester Assignments
 
 - Link to Assignment 1: [**Assignment 1**](https://github.com/kmustapic/HCI-project-2025-26/tree/main/assignments/assignment-1-idea-pitch) 
-- Link to Assignment 2: [**Assignment 2**](URL_TO_ASSIGNMENT_2) <!-- Replace with actual URL -->
+- Link to Assignment 2: [**Assignment 2**](https://github.com/kmustapic/HCI-project-2025-26/blob/main/assignments/assignment-2-user-personas-%26-IA/user_personas_%26_IA.pdf)
 - Link to Assignment 3: [**Assignment 3**](URL_TO_ASSIGNMENT_3) <!-- Replace with actual URL -->
 <!-- Add more assignments as necessary -->
 

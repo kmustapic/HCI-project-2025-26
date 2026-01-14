@@ -151,3 +151,13 @@ export async function deleteBlogPost(postId: string) {
         throw error;
     }
 }
+
+export async function getPostBySlug(slug: string) {
+    try {
+        const post = await client.fetch(POST_BY_SLUG_QUERY, { slug });
+        return post;
+    } catch (error) {
+        console.error("Error in getPostBySlug:", error);
+        return null;
+    }
+}

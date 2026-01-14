@@ -14,11 +14,16 @@ export const metadata = {
 interface Props {
     searchParams: Promise<{
         query?: string;
+        source?: string;
     }>;
 }
 
 export default async function ProductsPage({ searchParams }: Props) {
-    const query = (await searchParams)?.query || '';
+    const params = await searchParams;
+    const query = params?.query || '';
+    const source = params?.source;
+
+    const isFromHome = source === 'home';
 
     let data;
     try {
@@ -48,6 +53,13 @@ export default async function ProductsPage({ searchParams }: Props) {
 
     return (
         <div className="container mx-auto px-4 py-8">
+            {isFromHome && (
+                <div className="mb-6">
+                    <Link href="/" className="inline-flex items-center text-lg font-medium text-gray-500 hover:text-[#1a4d3e] transition-colors">
+                        ← Back to Home Page
+                    </Link>
+                </div>
+            )}
             <div className="flex flex-col items-center mb-10 text-center">
                 <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
                     All Recipes

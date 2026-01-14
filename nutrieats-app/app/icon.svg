@@ -1,0 +1,9 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Right (Large) Leaf -->
+  <path d="M30 50C30 50 28 35 35 20C42 5 58 8 58 8C58 8 55 25 45 40C35 55 30 50 30 50Z" fill="#4fb305"/>
+  <path d="M30 50C31 40 38 25 58 8" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
+  
+  <!-- Left (Small) Leaf -->
+  <path d="M30 50C30 50 24 40 20 30C16 20 8 25 8 25C8 25 15 40 22 48C29 56 30 50 30 50Z" fill="#3fa004"/>
+  <path d="M30 50C28 42 20 35 8 25" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
+</svg>

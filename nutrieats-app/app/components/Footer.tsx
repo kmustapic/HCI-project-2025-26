@@ -29,6 +29,8 @@ export default function Footer() {
                     </Link>
                 </div>
 
+
+
                 {/* Copyright */}
                 <div className="text-gray-500 text-sm">
                     © {new Date().getFullYear()} NutriEats. All rights reserved.

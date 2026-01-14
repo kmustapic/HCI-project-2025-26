@@ -21,27 +21,37 @@ const CategoryCard = ({
       </h2>
     </div>
 
-    {/* Vertical List */}
-    <ul className="space-y-4 flex-1">
+    {/* Button List */}
+    <div className="flex flex-col gap-3">
       {items.map((item) => (
-        <li key={item.label} className="flex items-start group">
-          <Link
-            href={item.href}
-            className="flex items-center text-gray-600 dark:text-gray-300 hover:text-[#1a4d3e] dark:hover:text-[#2d6a58] transition-colors text-base"
-          >
-            <span className="w-2 h-2 rounded-full bg-[#1a4d3e]/60 mr-3 mt-1.5 shrink-0 group-hover:bg-[#1a4d3e] transition-colors"></span>
-            {item.label}
-          </Link>
-        </li>
+        <Link
+          key={item.label}
+          href={item.href}
+          className="w-full max-w-[150px] mx-auto px-4 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-[#1a4d3e] hover:text-white hover:border-[#1a4d3e] dark:hover:bg-[#1a4d3e] dark:hover:text-white transition-all text-sm font-medium shadow-sm text-center"
+        >
+          {item.label}
+        </Link>
       ))}
-    </ul>
+    </div>
   </div>
 );
 
-export default function CategoriesPage() {
+export default async function CategoriesPage({
+  searchParams
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const { source } = await searchParams;
+  const isFromHome = source === 'home';
+
   return (
     <div className="min-h-screen bg-[#fcfcfc] dark:bg-gray-900 py-10 md:py-16 px-4 md:px-8">
       <div className="max-w-6xl mx-auto">
+        <div className="mb-6">
+          <Link href="/" className="inline-flex items-center text-lg font-medium text-gray-500 hover:text-[#1a4d3e] transition-colors">
+            ← Back to Home Page
+          </Link>
+        </div>
 
         {/* Header */}
         <div className="text-center mb-10 md:mb-16 space-y-2 md:space-y-3">

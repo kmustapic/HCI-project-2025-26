@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { getProducts } from './lib/api';
+import SurpriseMeButton from './components/SurpriseMeButton';
 
 const CATEGORIES = [
   { name: 'Breakfast', slug: 'breakfast' },
@@ -18,11 +19,11 @@ export default async function Page() {
     <div className="font-sans text-[#171717] bg-white dark:bg-gray-900 dark:text-gray-100 min-h-screen">
 
       {/* HERO SECTION */}
-      <section className="container mx-auto px-4 py-6 md:py-24 md:px-8 lg:px-16 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
-        <div className="flex-1 space-y-6 md:space-y-8 md:pr-12 text-center md:text-left">
+      <section className="container mx-auto px-4 py-8 md:py-24 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-0">
+        <div className="max-w-xl space-y-6 md:space-y-8 text-center md:text-left relative z-10 md:ml-12">
           <h1
             className="text-4xl md:text-7xl lg:text-8xl font-bold tracking-tight text-gray-900 dark:text-white"
-            style={{ fontSize: 'clamp(2.5rem, 8vw, 5rem)', lineHeight: 1.1 }}
+            style={{ fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', lineHeight: 1.1 }}
           >
             Discover <br className="hidden md:block" />
             healthy <br className="hidden md:block" />
@@ -33,19 +34,20 @@ export default async function Page() {
             recipes tailored to your health goals.
           </p>
 
-          <div className="flex items-center justify-center md:justify-start gap-4 pt-2 md:pt-4">
+          <div className="flex flex-col md:flex-row items-center justify-center md:justify-start gap-4 pt-2 md:pt-4 w-full max-w-[260px] md:max-w-none mx-auto md:mx-0">
             <Link
-              href="/products"
+              href="/products?source=home"
               style={{ color: '#ffffff' }}
-              className="bg-[#1a4d3e] !text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-[#1a4d3e]/90 transition-all shadow-lg hover:shadow-xl"
+              className="bg-[#1a4d3e] !text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-[#1a4d3e]/90 transition-all shadow-lg hover:shadow-xl w-full md:w-auto text-center"
             >
               Browse Recipes
             </Link>
+            <SurpriseMeButton className="w-full md:w-auto" />
           </div>
         </div>
 
         {/* Hero Image */}
-        <div className="flex-1 relative w-full max-w-lg md:max-w-2xl aspect-square">
+        <div className="hidden md:block relative w-full max-w-[400px] md:max-w-[500px] aspect-square md:-ml-6 md:-mt-12 z-0">
           <div className="relative w-full h-full rounded-full overflow-hidden border-8 border-white shadow-2xl">
             <Image
               src="https://ihzsvzzmtbzeqmkokhwo.supabase.co/storage/v1/object/public/recipes/healthy-salad-bowl.png"

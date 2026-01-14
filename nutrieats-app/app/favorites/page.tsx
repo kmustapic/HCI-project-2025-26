@@ -2,19 +2,27 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
 import { Recipe } from '../lib/recipes';
 import RecipeCard from '../components/RecipeCard';
 import ProtectedRoute from '../components/ProtectedRoute';
+import SearchBar from '../components/SearchBar';
+import { getRecipesByIds } from '../lib/api';
 import { supabase } from '../lib/supabaseClient';
-import { client } from '../../sanity/lib/client';
-import { RECIPE_BY_ID_QUERY } from '../../sanity/lib/queries';
-import { urlFor } from '../../sanity/lib/image';
 
 export default function FavoritesPage() {
   const { user } = useAuth();
+  const searchParams = useSearchParams();
+  const query = searchParams.get('query')?.toLowerCase() || '';
   const [favorites, setFavorites] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Filter favorites based on search query
+  const filteredFavorites = favorites.filter(recipe =>
+    recipe.title.toLowerCase().includes(query) ||
+    recipe.description.toLowerCase().includes(query)
+  );
 
   useEffect(() => {
     async function fetchFavorites() {
@@ -34,39 +42,19 @@ export default function FavoritesPage() {
         }
 
         if (!favoriteIds || favoriteIds.length === 0) {
+          console.log('No favorites found in Supabase');
           setFavorites([]);
           setIsLoading(false);
           return;
         }
 
-        // 2. Fetch full recipe details from Sanity for each ID
-        const recipePromises = favoriteIds.map(async (fav) => {
-          try {
-            const data = await client.fetch(RECIPE_BY_ID_QUERY, { id: fav.recipe_id });
-            if (!data) return null;
+        const ids = favoriteIds.map(f => f.recipe_id);
+        console.log('Fetching favorites for IDs:', ids);
 
-            // Map Sanity data to Recipe interface
-            return {
-              id: data._id,
-              title: data.name,
-              description: data.description || '',
-              image: data.image ? urlFor(data.image).url() : (data.imageUrl || null),
-              calories: data.calories ? data.calories + ' kcal' : 'N/A',
-              time: '15 mins', // Placeholder
-              category: data.type,
-              ingredients: data.ingredients || [],
-              instructions: data.instructions || [],
-              dietary: data.dietary || []
-            } as Recipe;
-          } catch (err) {
-            console.error(`Error fetching recipe ${fav.recipe_id}:`, err);
-            return null;
-          }
-        });
+        const recipes = await getRecipesByIds(ids);
+        console.log('Fetched recipes from Sanity:', recipes);
 
-        const recipes = await Promise.all(recipePromises);
-        const validRecipes = recipes.filter((r): r is Recipe => r !== null);
-        setFavorites(validRecipes);
+        setFavorites(recipes);
       } catch (error) {
         console.error('Error in fetchFavorites:', error);
       }
@@ -95,6 +83,11 @@ export default function FavoritesPage() {
   return (
     <ProtectedRoute>
       <div className="container mx-auto px-4 py-8 md:py-12">
+        <div className="mb-6">
+          <Link href="/" className="inline-flex items-center text-lg font-medium text-gray-500 hover:text-[#1a4d3e] transition-colors">
+            ← Back to Home Page
+          </Link>
+        </div>
         <div className="text-center mb-10">
           <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Your Favorites
@@ -104,20 +97,29 @@ export default function FavoritesPage() {
           </p>
         </div>
 
+        {(favorites.length > 0 || query) && <SearchBar />}
+
         {favorites.length > 0 ? (
-          /* Mobile: 1 column (grid-cols-1), Tablet: 2 cols, Desktop: 3/4 cols */
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 mb-16">
-            {favorites.map((recipe) => (
-              <RecipeCard
-                key={recipe.id}
-                recipe={recipe}
-                source="favorites"
-                onRemove={() => {
-                  setFavorites(prev => prev.filter(r => r.id !== recipe.id));
-                }}
-              />
-            ))}
-          </div>
+          filteredFavorites.length > 0 ? (
+            /* Mobile: 1 column (grid-cols-1), Tablet: 2 cols, Desktop: 3/4 cols */
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 mb-16">
+              {filteredFavorites.map((recipe) => (
+                <RecipeCard
+                  key={recipe.id}
+                  recipe={recipe}
+                  source="favorites"
+                  onRemove={() => {
+                    setFavorites(prev => prev.filter(r => r.id !== recipe.id));
+                  }}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-20">
+              <p className="text-gray-500 text-xl font-medium mb-2">No recipes found matching "{query}"</p>
+              <p className="text-gray-400">Try searching for something else ✨</p>
+            </div>
+          )
         ) : (
           <div className="text-center py-20 bg-gray-50 dark:bg-gray-800/50 rounded-3xl mx-auto max-w-2xl">
             <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700/50 rounded-full flex items-center justify-center mx-auto mb-6">

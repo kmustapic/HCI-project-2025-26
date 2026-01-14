@@ -137,7 +137,15 @@ export default function RecipeCard({ recipe, onRemove, source }: { recipe: Recip
                     <span className="text-[10px] md:text-xs font-bold text-[#1a4d3e] bg-[#1a4d3e]/10 dark:bg-[#1a4d3e]/30 px-2 py-0.5 md:py-1 rounded-full uppercase tracking-wide">
                         {recipe.category}
                     </span>
-                    <span className="text-[10px] md:text-xs text-gray-500 font-medium">{recipe.calories}</span>
+                    <span className="text-orange-800 dark:text-orange-300 font-bold bg-[#fffbf0] dark:bg-orange-950/30 px-2.5 md:px-3 py-1 rounded-lg flex items-center gap-1.5 border border-orange-100 dark:border-orange-800/50 shadow-sm leading-none">
+                        <span className="text-base md:text-lg flex items-center gap-1">
+                            <span>🔥</span>
+                            <span>{recipe.calories.split(' ')[0]}</span>
+                        </span>
+                        <span className="text-[10px] md:text-xs opacity-70 font-medium lowercase">
+                            {recipe.calories.split(' ')[1]}
+                        </span>
+                    </span>
                 </div>
 
                 <h3 className="text-base md:text-xl font-bold text-gray-900 dark:text-white mb-1 md:mb-2 group-hover:text-[#1a4d3e] transition-colors line-clamp-1">
@@ -148,9 +156,10 @@ export default function RecipeCard({ recipe, onRemove, source }: { recipe: Recip
                     {recipe.description}
                 </p>
 
-                <div className="mt-auto pt-3 md:pt-4 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between text-[10px] md:text-sm">
-                    <span className="font-semibold text-[#1a4d3e] hover:underline">View Recipe</span>
-                    <span className="text-gray-400">➜</span>
+                <div className="mt-auto pt-3 md:pt-4 border-t border-gray-100 dark:border-gray-700 flex items-center justify-end">
+                    <span className="font-bold text-[#1a4d3e] text-sm md:text-base group-hover:translate-x-1 transition-transform inline-block">
+                        View Recipe →
+                    </span>
                 </div>
             </div>
         </Link>

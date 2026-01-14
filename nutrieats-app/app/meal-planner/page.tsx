@@ -98,24 +98,24 @@ function MealPlannerContent() {
     setMeals(newMeals);
   };
 
-  const savePlan = async () => {
-    if (!user) return;
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
+  // Triggered by "Save Daily Plan" button
+  const handleSaveClick = () => {
+    if (!user) return;
     if (totalCalories === 0) {
       setShowErrorModal(true);
       return;
     }
+    setShowConfirmModal(true);
+  };
 
+  // Actual save logic triggered by Modal confirmation
+  const confirmSave = async () => {
+    if (!user) return;
+
+    setLoading(true); // Optional: show loading state during save
     const dateStr = getDateKey(selectedDate);
-
-    // UPSERT: Insert or Update if exists
-    // We need to query if it exists first or use upsert if table has constraints.
-    // Since we didn't set a unique constraint on (user_id, date) in the SQL snippet I provided (oops!),
-    // we should rely on checking existing ID or simple delete-then-insert methodology,
-    // OR ideally alter the table to have unique constraint.
-    // FOR SAFETY: Let's check if a row exists, then update it, else insert.
-    // Actually, `upsert` works best with Primary Key.
-    // Let's use a "select -> update/insert" approach for safety without unique constraint on date.
 
     // 1. Check if plan exists for this date/user
     const { data: existing } = await supabase
@@ -146,6 +146,9 @@ function MealPlannerContent() {
       error = res.error;
     }
 
+    setLoading(false);
+    setShowConfirmModal(false);
+
     if (error) {
       console.error("Error saving plan:", error);
       alert("Failed to save plan. Please try again.");
@@ -165,7 +168,11 @@ function MealPlannerContent() {
   return (
     <div className="min-h-screen bg-[#fcfcfc] dark:bg-gray-900 py-8 px-4 md:px-8 pb-24 overflow-x-clip">
       <div className="max-w-4xl mx-auto">
-
+        <div className="mb-6">
+          <Link href="/" className="inline-flex items-center text-lg font-medium text-gray-500 hover:text-[#1a4d3e] transition-colors">
+            ← Back to Home Page
+          </Link>
+        </div>
         <header className="mb-8 flex flex-col md:flex-row justify-between items-start gap-4">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-1">Meal Planner</h1>
@@ -202,8 +209,11 @@ function MealPlannerContent() {
               <span className="text-[10px] md:text-xs font-bold text-white">2000 kcal</span>
             </div>
           </div>
-          <div className="text-right relative z-10">
-            <div className="text-3xl md:text-5xl font-black leading-none tabular-nums tracking-tighter mb-1">{totalCalories}</div>
+          <div className="text-right relative z-10 flex flex-col items-end">
+            <div className="text-3xl md:text-5xl font-black leading-none tabular-nums tracking-tighter mb-1 flex items-center gap-2">
+              <span className="text-2xl md:text-3xl transition-transform hover:scale-110 cursor-default">🔥</span>
+              {totalCalories.toLocaleString()}
+            </div>
             <div className="text-[10px] md:text-xs uppercase tracking-widest text-green-300 font-black opacity-80">Total Calories</div>
           </div>
         </div>
@@ -264,12 +274,12 @@ function MealPlannerContent() {
           </div>
         )}
 
-        {/* Footer Save Action */}
-        <div className="mt-8 flex justify-center pb-10">
+        {/* Footer Save Action - Sticky */}
+        <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-t border-gray-100 dark:border-gray-800 p-4 md:p-6 flex justify-center animate-in slide-in-from-bottom-5 duration-500">
           <button
-            onClick={savePlan}
+            onClick={handleSaveClick}
             style={{ color: '#ffffff' }}
-            className="bg-[#1a4d3e] hover:opacity-90 !text-white px-10 py-4 rounded-full font-bold shadow-lg shadow-[#1a4d3e]/20 dark:shadow-[#1a4d3e]/40 hover:-translate-y-1 transition-all flex items-center gap-3 text-lg"
+            className="bg-[#1a4d3e] hover:opacity-90 !text-white px-12 py-4 rounded-full font-bold shadow-xl shadow-[#1a4d3e]/20 dark:shadow-[#1a4d3e]/40 hover:-translate-y-1 transition-all flex items-center gap-3 text-lg md:text-xl"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
@@ -277,6 +287,53 @@ function MealPlannerContent() {
             Save Daily Plan
           </button>
         </div>
+
+        {/* Confirmation Modal */}
+        {showConfirmModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 max-w-md w-full transform scale-100 animate-in zoom-in-95 duration-200 border border-gray-100 dark:border-gray-700">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center">Confirm Save?</h3>
+              <p className="text-gray-500 dark:text-gray-400 mb-6 text-center text-lg">
+                You are about to save a plan with <span className="font-bold text-[#1a4d3e] dark:text-[#2d6a58]">{totalCalories.toLocaleString()} calories</span>.
+                <br />
+                Is this correct?
+              </p>
+
+              {/* Simple summary of filled slots */}
+              <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 mb-8 space-y-3">
+                {Object.entries(meals)
+                  .filter(([_, meal]) => meal !== null)
+                  .sort(([a], [b]) => {
+                    const order = ['breakfast', 'lunch', 'dinner', 'snack'];
+                    return order.indexOf(a) - order.indexOf(b);
+                  })
+                  .map(([type, meal]) => (
+                    <div key={type} className="flex justify-between items-start text-sm gap-4">
+                      <span className="capitalize text-gray-500 dark:text-gray-400 font-bold shrink-0">{type}</span>
+                      <span className="font-semibold text-gray-900 dark:text-gray-200 text-right">
+                        {meal?.title}
+                      </span>
+                    </div>
+                  ))}
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={confirmSave}
+                  className="w-full py-3.5 bg-[#1a4d3e] hover:opacity-90 text-white font-bold rounded-xl transition-all shadow-lg shadow-[#1a4d3e]/20"
+                >
+                  Yes, Save Plan
+                </button>
+                <button
+                  onClick={() => setShowConfirmModal(false)}
+                  className="w-full py-3.5 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white font-bold hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Success Modal */}
         {showSuccessModal && (

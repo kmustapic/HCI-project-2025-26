@@ -12,10 +12,16 @@ export default function Navbar() {
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
     const isLoggedIn = !!user;
+    const [showLockedFeature, setShowLockedFeature] = useState<string | null>(null);
 
     const handleLogoutClick = () => {
         setIsMenuOpen(false); // Close mobile menu if open
         setShowLogoutConfirm(true);
+    };
+
+    const handleLockedFeatureClick = (featureName: string) => {
+        setIsMenuOpen(false); // Close mobile menu if open
+        setShowLockedFeature(featureName);
     };
 
     const confirmLogout = () => {
@@ -37,7 +43,7 @@ export default function Navbar() {
     };
 
     const linkClass = (path: string) => `
-    text-base transition-colors relative
+    text-lg transition-colors relative
     ${isActive(path)
             ? 'text-[#1a4d3e] font-bold md:border-b-2 md:border-[#1a4d3e] md:pb-0.5'
             : 'text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white'}
@@ -61,16 +67,20 @@ export default function Navbar() {
 
             <nav className={`sticky top-0 z-[60] w-full flex items-center justify-between px-4 py-4 md:px-8 lg:px-16 transition-all duration-500 border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm ${isMenuOpen ? 'md:shadow-none' : ''
                 }`}>
-                <Link href="/" className="text-2xl font-bold text-black dark:text-white tracking-tight z-[70]">
+                <Link
+                    href="/"
+                    className={`text-2xl font-bold text-black dark:text-white tracking-tight z-[70] transition-opacity duration-300 ${isMenuOpen ? 'opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto' : 'opacity-100'
+                        }`}
+                >
                     NutriEats
                 </Link>
 
                 {/* Desktop Menu */}
-                <div className="hidden md:flex items-center gap-8">
+                <div className="hidden md:flex items-center gap-12">
                     <Link href="/browse-recipes/categories" className={linkClass('/browse-recipes')}>
                         Categories
                     </Link>
-                    {isLoggedIn && (
+                    {isLoggedIn ? (
                         <>
                             <Link href="/favorites" className={linkClass('/favorites')}>
                                 Favorites
@@ -78,6 +88,27 @@ export default function Navbar() {
                             <Link href="/meal-planner" className={linkClass('/meal-planner')}>
                                 Meal Planner
                             </Link>
+                        </>
+                    ) : (
+                        <>
+                            <button
+                                onClick={() => handleLockedFeatureClick('Favorites')}
+                                className="text-lg transition-colors relative text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white flex items-center gap-2"
+                            >
+                                Favorites
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                                </svg>
+                            </button>
+                            <button
+                                onClick={() => handleLockedFeatureClick('Meal Planner')}
+                                className="text-lg transition-colors relative text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white flex items-center gap-2"
+                            >
+                                Meal Planner
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                                </svg>
+                            </button>
                         </>
                     )}
 
@@ -97,7 +128,7 @@ export default function Navbar() {
                         </button>
                     ) : (
                         <Link
-                            href="/login"
+                            href={`/login?redirectTo=${pathname}`}
                             className="px-6 py-2 border border-gray-200 rounded-full text-gray-900 dark:text-gray-200 font-medium hover:border-gray-400 dark:border-gray-700 transition-colors"
                         >
                             Log in
@@ -125,7 +156,7 @@ export default function Navbar() {
                         <Link href="/browse-recipes/categories" className={mobileLinkClass('/browse-recipes')} onClick={closeMenu}>
                             Categories
                         </Link>
-                        {isLoggedIn && (
+                        {isLoggedIn ? (
                             <>
                                 <Link href="/favorites" className={mobileLinkClass('/favorites')} onClick={closeMenu}>
                                     Favorites
@@ -133,6 +164,27 @@ export default function Navbar() {
                                 <Link href="/meal-planner" className={mobileLinkClass('/meal-planner')} onClick={closeMenu}>
                                     Meal Planner
                                 </Link>
+                            </>
+                        ) : (
+                            <>
+                                <button
+                                    onClick={() => handleLockedFeatureClick('Favorites')}
+                                    className="text-xl font-bold py-4 px-10 transition-all w-full text-left text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800 flex items-center justify-between"
+                                >
+                                    <span>Favorites</span>
+                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                                    </svg>
+                                </button>
+                                <button
+                                    onClick={() => handleLockedFeatureClick('Meal Planner')}
+                                    className="text-xl font-bold py-4 px-10 transition-all w-full text-left text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800 flex items-center justify-between"
+                                >
+                                    <span>Meal Planner</span>
+                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                                    </svg>
+                                </button>
                             </>
                         )}
                         <Link href="/blog" className={mobileLinkClass('/blog')} onClick={closeMenu}>
@@ -153,7 +205,7 @@ export default function Navbar() {
                                 </button>
                             ) : (
                                 <Link
-                                    href="/login"
+                                    href={`/login?redirectTo=${pathname}`}
                                     className="w-full py-4 border-2 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-3xl font-bold text-xl text-center"
                                     onClick={closeMenu}
                                 >
@@ -190,6 +242,101 @@ export default function Navbar() {
                             >
                                 Stay logged in
                             </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showLockedFeature && (
+                <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 backdrop-blur-md animate-in fade-in duration-300">
+                    <div className="bg-white dark:bg-gray-800 rounded-[2rem] p-8 shadow-2xl max-w-md w-full transform transition-all scale-100 animate-in zoom-in-95 duration-300 border border-gray-100 dark:border-gray-700 relative">
+                        {/* Close button */}
+                        <button
+                            onClick={() => setShowLockedFeature(null)}
+                            className="absolute top-6 right-6 w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition-all"
+                            aria-label="Close"
+                        >
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+
+                        <div className="w-16 h-16 bg-gradient-to-br from-[#1a4d3e] to-[#2d7a5f] text-white rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                            </svg>
+                        </div>
+                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2 text-center">
+                            {showLockedFeature === 'Favorites' ? '❤️ Save Your Favorites' : '📅 Plan Your Meals'}
+                        </h3>
+                        <p className="text-gray-600 dark:text-gray-300 mb-6 text-center leading-relaxed">
+                            {showLockedFeature === 'Favorites'
+                                ? 'Create an account to save your favorite recipes and access them anytime!'
+                                : 'Create an account to plan your weekly meals and stay organized with your nutrition goals!'}
+                        </p>
+
+                        {/* Feature highlights */}
+                        <div className="bg-gray-50 dark:bg-gray-700/50 rounded-2xl p-4 mb-6 space-y-2">
+                            {showLockedFeature === 'Favorites' ? (
+                                <>
+                                    <div className="flex items-start gap-3">
+                                        <svg className="w-5 h-5 text-[#1a4d3e] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                        </svg>
+                                        <span className="text-sm text-gray-700 dark:text-gray-300">Save unlimited recipes</span>
+                                    </div>
+                                    <div className="flex items-start gap-3">
+                                        <svg className="w-5 h-5 text-[#1a4d3e] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                        </svg>
+                                        <span className="text-sm text-gray-700 dark:text-gray-300">Access from any device</span>
+                                    </div>
+                                    <div className="flex items-start gap-3">
+                                        <svg className="w-5 h-5 text-[#1a4d3e] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                        </svg>
+                                        <span className="text-sm text-gray-700 dark:text-gray-300">Build your personal cookbook</span>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="flex items-start gap-3">
+                                        <svg className="w-5 h-5 text-[#1a4d3e] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                        </svg>
+                                        <span className="text-sm text-gray-700 dark:text-gray-300">Plan meals for the entire week</span>
+                                    </div>
+                                    <div className="flex items-start gap-3">
+                                        <svg className="w-5 h-5 text-[#1a4d3e] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                        </svg>
+                                        <span className="text-sm text-gray-700 dark:text-gray-300">Track nutrition goals</span>
+                                    </div>
+                                    <div className="flex items-start gap-3">
+                                        <svg className="w-5 h-5 text-[#1a4d3e] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                        </svg>
+                                        <span className="text-sm text-gray-700 dark:text-gray-300">Stay organized & healthy</span>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+
+                        <div className="flex flex-col gap-3">
+                            <Link
+                                href={`/signup?redirectTo=/${showLockedFeature.toLowerCase().replace(' ', '-')}`}
+                                onClick={() => setShowLockedFeature(null)}
+                                className="w-full py-3.5 bg-[#1a4d3e] hover:bg-[#2d7a5f] text-white rounded-2xl transition-all font-bold text-center shadow-lg shadow-[#1a4d3e]/25 active:scale-[0.98]"
+                            >
+                                Create Free Account
+                            </Link>
+                            <Link
+                                href={`/login?redirectTo=/${showLockedFeature.toLowerCase().replace(' ', '-')}`}
+                                onClick={() => setShowLockedFeature(null)}
+                                className="w-full py-3 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors font-semibold text-center"
+                            >
+                                Already have an account? Log in
+                            </Link>
                         </div>
                     </div>
                 </div>

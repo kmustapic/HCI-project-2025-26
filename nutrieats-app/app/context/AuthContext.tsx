@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             password,
         });
         if (error) throw error;
-        router.push('/meal-planner');
+        // Redirect handled by the caller
     };
 
     const logout = async () => {
@@ -89,7 +89,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (error) throw error;
         // Note: Supabase might require email confirmation by default.
         // If so, this might need handling, but we'll assume default or user checks email.
-        router.push('/meal-planner');
+        // Redirect handled by the caller
     };
 
     return (

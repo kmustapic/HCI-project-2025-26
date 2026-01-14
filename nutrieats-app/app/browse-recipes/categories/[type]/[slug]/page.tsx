@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { getRecipesByCategory } from '../../../../lib/api';
+import { Recipe } from '../../../../lib/recipes';
 import { notFound } from 'next/navigation';
 import RecipeCard from '../../../../components/RecipeCard';
+import SearchBar from '../../../../components/SearchBar';
 
 interface Props {
     params: Promise<{
@@ -34,8 +36,8 @@ export default async function CategoryPage({
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
     const { type, slug } = await params;
-    const { source } = await searchParams;
-    const recipes = await getRecipesByCategory(type, slug);
+    const { source, query } = await searchParams;
+    const recipes = await getRecipesByCategory(type, slug, query as string);
 
     // Format title for display
     const title = slug
@@ -56,7 +58,7 @@ export default async function CategoryPage({
             <div className="flex flex-col items-center mb-10 text-center">
                 <Link
                     href={backLinkHref}
-                    className="text-[#1a4d3e] hover:text-[#143d31] font-medium mb-4 flex items-center gap-1 self-start md:self-center"
+                    className="inline-flex items-center text-lg font-medium text-gray-500 hover:text-[#1a4d3e] transition-colors mb-4 self-start"
                 >
                     {backLinkText}
                 </Link>
@@ -68,9 +70,11 @@ export default async function CategoryPage({
                 </p>
             </div>
 
+            {((recipes && recipes.length > 0) || query) && <SearchBar />}
+
             {recipes.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {recipes.map((recipe) => (
+                    {recipes.map((recipe: Recipe) => (
                         <RecipeCard key={recipe.id} recipe={recipe} />
                     ))}
                 </div>

@@ -7,7 +7,8 @@ export const RECIPES_QUERY = defineQuery(`*[_type == "recipe"] | order(_id asc) 
   calories,
   type,
   image,
-  "imageUrl": image.asset->url
+  "imageUrl": image.asset->url,
+  dietary
 }`)
 
 export const RECIPES_BY_CATEGORY_QUERY = defineQuery(`*[_type == "recipe" && type == $category] | order(_id asc) {
@@ -17,17 +18,19 @@ export const RECIPES_BY_CATEGORY_QUERY = defineQuery(`*[_type == "recipe" && typ
   calories,
   type,
   image,
-  "imageUrl": image.asset->url
+  "imageUrl": image.asset->url,
+  dietary
 }`)
 
-export const RECIPES_SEARCH_QUERY = defineQuery(`*[_type == "recipe" && name match $search + "*"] | order(_id asc) {
+export const RECIPES_SEARCH_QUERY = defineQuery(`*[_type == "recipe" && (name match $search + "*" || description match $search + "*" || $search in dietary)] | order(_id asc) {
   _id,
   name,
   description,
   calories,
   type,
   image,
-  "imageUrl": image.asset->url
+  "imageUrl": image.asset->url,
+  dietary
 }`)
 
 export const RECIPE_BY_ID_QUERY = defineQuery(`*[_type == "recipe" && _id == $id][0]{
@@ -43,21 +46,36 @@ export const RECIPE_BY_ID_QUERY = defineQuery(`*[_type == "recipe" && _id == $id
   dietary
 }`)
 
-export const POSTS_QUERY = defineQuery(`*[_type == "post"] | order(publishedAt desc) {
+export const RECIPES_BY_IDS_QUERY = defineQuery(`* [_type == "recipe" && _id in $ids] | order(_id asc) {
+  _id,
+  name,
+  description,
+  calories,
+  type,
+  image,
+  "imageUrl": image.asset -> url,
+  ingredients,
+  instructions,
+  dietary
+}`)
+
+export const POSTS_QUERY = defineQuery(`* [_type == "post"] | order(publishedAt desc) {
   _id,
   title,
   "slug": slug.current,
   publishedAt,
   excerpt,
-  "mainImageUrl": mainImage.asset->url
+  "mainImageUrl": mainImage.asset -> url
 }`)
 
-export const POST_BY_SLUG_QUERY = defineQuery(`*[_type == "post" && slug.current == $slug][0] {
+export const POST_BY_SLUG_QUERY = defineQuery(`* [_type == "post" && slug.current == $slug][0] {
   _id,
   title,
   "slug": slug.current,
   publishedAt,
   mainImage,
-  "mainImageUrl": mainImage.asset->url,
+  "mainImageUrl": mainImage.asset -> url,
   body
 }`)
+
+export const ALL_RECIPES_ID_QUERY = defineQuery(`*[_type == "recipe"] { _id }`)

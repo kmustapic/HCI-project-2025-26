@@ -83,11 +83,17 @@ export default async function ProductPage({
                                 </span>
                                 <h1 className="text-3xl md:text-5xl font-bold mb-2">{product.title}</h1>
                                 <div className="flex items-center gap-6 text-sm md:text-base opacity-90">
-                                    <span className="flex items-center gap-2">
-                                        🕒 {product.time}
+                                    <span className="flex items-center gap-2 bg-[#fffdfa] text-orange-900 px-2.5 py-1 rounded-lg border border-orange-50 shadow-sm leading-none">
+                                        <span className="text-xl md:text-2xl font-bold flex items-center gap-1.5">
+                                            <span>🔥</span>
+                                            <span>{product.calories.split(' ')[0]}</span>
+                                        </span>
+                                        <span className="text-sm md:text-base font-medium opacity-70 lowercase">
+                                            {product.calories.split(' ')[1]}
+                                        </span>
                                     </span>
                                     <span className="flex items-center gap-2">
-                                        🔥 {product.calories}
+                                        🕒 {product.time}
                                     </span>
                                 </div>
                             </div>

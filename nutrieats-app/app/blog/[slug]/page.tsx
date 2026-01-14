@@ -38,9 +38,9 @@ export default async function BlogPostPage({ params }: Props) {
                     <div className="container mx-auto">
                         <Link
                             href="/blog"
-                            className="inline-flex items-center text-white/80 hover:text-white mb-6 font-medium transition-colors"
+                            className="inline-flex items-center px-4 py-2 rounded-xl bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-white/30 transition-all font-bold text-sm mb-8 group"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 mr-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                             </svg>
                             Back to Blog
@@ -48,14 +48,11 @@ export default async function BlogPostPage({ params }: Props) {
                         <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white max-w-4xl leading-tight break-words">
                             {post.title}
                         </h1>
-                        <div className="flex items-center gap-6 mt-8 text-white/90">
-                            <div className="flex items-center gap-2">
-                                <span className="bg-white/20 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
-                                    Article
-                                </span>
-                            </div>
-                            <span className="font-medium">
-                                {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString(undefined, {
+                        <div className="flex items-center gap-4 mt-8 text-white/90 font-medium">
+                            <span className="font-bold uppercase tracking-widest text-xs opacity-80 bg-white/10 px-3 py-1.5 rounded-lg backdrop-blur-sm border border-white/10">Official Article</span>
+                            <span className="text-white/40">•</span>
+                            <span className="text-sm tracking-wide">
+                                {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
                                     year: 'numeric',
                                     month: 'long',
                                     day: 'numeric'

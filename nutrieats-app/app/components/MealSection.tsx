@@ -46,7 +46,17 @@ export default function MealSection({
                 <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg animate-in fade-in zoom-in duration-200">
                     <div>
                         <p className="font-medium text-gray-900 dark:text-white">{currentMeal.title}</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">{currentMeal.calories}</p>
+                        <div className="mt-1 flex items-center">
+                            <span className="flex items-center gap-1.5 bg-[#fffdfa] text-orange-900 px-2.5 py-1 rounded-lg border border-orange-100 shadow-sm leading-none">
+                                <span className="text-sm font-bold flex items-center gap-1">
+                                    <span>🔥</span>
+                                    <span>{currentMeal.calories.split(' ')[0]}</span>
+                                </span>
+                                <span className="text-[10px] font-medium opacity-70 lowercase">
+                                    {currentMeal.calories.split(' ')[1]}
+                                </span>
+                            </span>
+                        </div>
                     </div>
                     <button
                         onClick={onRemove}
@@ -84,7 +94,7 @@ export default function MealSection({
                                 <option value="" disabled>Select a {title.toLowerCase()}...</option>
                                 {relevantRecipes.map(r => (
                                     <option key={r.id} value={r.id}>
-                                        {r.title} ({r.calories})
+                                        {r.title} (🔥 {r.calories})
                                     </option>
                                 ))}
                             </select>

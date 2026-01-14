@@ -25,6 +25,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+<<<<<<< HEAD
 .categories-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -73,3 +74,16 @@ h2{font-size:30px;margin-top:20px}
 footer{margin:48px 0 16px;text-align:center;color:#666;font-size:13px}
 hr{border:0;border-top:1px solid #eee;margin:24px 0}
 p{font-size:20px;}
+=======
+* {
+  box-sizing: border-box;
+}
+
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+>>>>>>> 019dc6f... Added final project version

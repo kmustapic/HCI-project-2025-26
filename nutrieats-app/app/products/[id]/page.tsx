@@ -17,8 +17,20 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     }
 }
 
+<<<<<<< HEAD
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
+=======
+export default async function ProductPage({
+    params,
+    searchParams
+}: {
+    params: Promise<{ id: string }>,
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+    const { id } = await params;
+    const { source } = await searchParams;
+>>>>>>> 019dc6f... Added final project version
 
     let product;
     try {
@@ -27,11 +39,16 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
         return (
             <div className="container mx-auto p-8 text-center">
                 <h1 className="text-2xl font-bold mb-4">Recipe not found</h1>
+<<<<<<< HEAD
                 <Link href="/products" className="text-green-600 underline">Return to recipes</Link>
+=======
+                <Link href="/products" className="text-[#1a4d3e] underline">Return to recipes</Link>
+>>>>>>> 019dc6f... Added final project version
             </div>
         )
     }
 
+<<<<<<< HEAD
         return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-12">
             {/* Breadcrumb / Back nav */}
@@ -39,10 +56,28 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                 <div className="container mx-auto px-4 py-4">
                     <Link href="/products" className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-green-600 transition-colors">
                         ← Back to all recipes
+=======
+    const isFromHome = source === 'home';
+    const isFromFavorites = source === 'favorites';
+
+    const backLinkHref = isFromHome ? '/' : (isFromFavorites ? '/favorites' : '/products');
+    const backLinkText = isFromHome
+        ? '← Back to Home Page'
+        : (isFromFavorites ? '← Back to Favorites' : '← Back to all recipes');
+
+    return (
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-12">
+            {/* Breadcrumb / Back nav */}
+            <div className="">
+                <div className="container mx-auto px-4 pt-6 pb-2">
+                    <Link href={backLinkHref} className="inline-flex items-center text-lg font-medium text-gray-500 hover:text-[#1a4d3e] transition-colors">
+                        {backLinkText}
+>>>>>>> 019dc6f... Added final project version
                     </Link>
                 </div>
             </div>
 
+<<<<<<< HEAD
             <article className="container mx-auto px-4 py-8 max-w-4xl">
                 {/* Header Section */}
                 <div className="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden shadow-lg mb-8">
@@ -57,6 +92,29 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                             <div className="p-6 md:p-10 text-white w-full">
                                 <span className="inline-block px-3 py-1 bg-green-500 text-xs font-bold rounded-full mb-3 uppercase tracking-wider">
+=======
+            <article className="container mx-auto px-4 pt-2 pb-8 max-w-4xl">
+                {/* Header Section */}
+                <div className="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden shadow-lg mb-8">
+                    <div className="relative w-full h-[300px] md:h-[400px] bg-gray-100 dark:bg-gray-700">
+                        {product.image ? (
+                            <Image
+                                src={product.image}
+                                alt={product.title}
+                                fill
+                                unoptimized
+                                className="object-cover"
+                                priority
+                            />
+                        ) : (
+                            <div className="flex items-center justify-center h-full text-gray-400">
+                                No Image Available
+                            </div>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
+                            <div className="p-6 md:p-10 text-white w-full">
+                                <span className="inline-block px-3 py-1 bg-[#1a4d3e] text-xs font-bold rounded-full mb-3 uppercase tracking-wider">
+>>>>>>> 019dc6f... Added final project version
                                     {product.category}
                                 </span>
                                 <h1 className="text-3xl md:text-5xl font-bold mb-2">{product.title}</h1>
@@ -83,13 +141,21 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                     {/* Ingredients Column */}
                     <div className="md:col-span-1">
                         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6 sticky top-24">
+<<<<<<< HEAD
                             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+=======
+                            <h2 className="text-xl font-bold mb-4 flex items-center gap-2 border-b pb-2">
+>>>>>>> 019dc6f... Added final project version
                                 🛒 Ingredients
                             </h2>
                             <ul className="space-y-3">
                                 {product.ingredients.map((ingredient, i) => (
                                     <li key={i} className="flex items-start gap-3 text-gray-700 dark:text-gray-300">
+<<<<<<< HEAD
                                         <span className="w-1.5 h-1.5 rounded-full bg-green-500 mt-2.5 shrink-0"></span>
+=======
+                                        <span className="w-1.5 h-1.5 rounded-full bg-[#1a4d3e] mt-2.5 shrink-0"></span>
+>>>>>>> 019dc6f... Added final project version
                                         <span>{ingredient}</span>
                                     </li>
                                 ))}
@@ -106,7 +172,11 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                             <div className="space-y-8">
                                 {product.instructions.map((step, i) => (
                                     <div key={i} className="flex gap-4">
+<<<<<<< HEAD
                                         <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 flex items-center justify-center font-bold">
+=======
+                                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#1a4d3e]/10 dark:bg-[#1a4d3e]/30 text-[#1a4d3e] dark:text-[#2d6a58] flex items-center justify-center font-bold">
+>>>>>>> 019dc6f... Added final project version
                                             {i + 1}
                                         </div>
                                         <div className="pt-1">

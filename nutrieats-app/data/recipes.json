@@ -1,0 +1,74 @@
+[
+  {
+    "id": "1",
+    "name": "Oatmeal with Berries",
+    "calories": 350,
+    "type": "breakfast"
+  },
+  {
+    "id": "2",
+    "name": "Avocado Toast",
+    "calories": 400,
+    "type": "breakfast"
+  },
+  {
+    "id": "3",
+    "name": "Scrambled Eggs & Spinach",
+    "calories": 320,
+    "type": "breakfast"
+  },
+  {
+    "id": "4",
+    "name": "Grilled Chicken Salad",
+    "calories": 450,
+    "type": "lunch"
+  },
+  {
+    "id": "5",
+    "name": "Quinoa Bowl",
+    "calories": 420,
+    "type": "lunch"
+  },
+  {
+    "id": "6",
+    "name": "Turkey Wrap",
+    "calories": 380,
+    "type": "lunch"
+  },
+  {
+    "id": "7",
+    "name": "Salmon with Asparagus",
+    "calories": 550,
+    "type": "dinner"
+  },
+  {
+    "id": "8",
+    "name": "Vegetable Stir Fry",
+    "calories": 400,
+    "type": "dinner"
+  },
+  {
+    "id": "9",
+    "name": "Pasta Primavera",
+    "calories": 600,
+    "type": "dinner"
+  },
+  {
+    "id": "10",
+    "name": "Greek Yogurt",
+    "calories": 150,
+    "type": "snack"
+  },
+  {
+    "id": "11",
+    "name": "Apple & Almond Butter",
+    "calories": 200,
+    "type": "snack"
+  },
+  {
+    "id": "12",
+    "name": "Protein Bar",
+    "calories": 250,
+    "type": "snack"
+  }
+]

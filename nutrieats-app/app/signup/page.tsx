@@ -1,12 +1,12 @@
 
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function SignupPage() {
+function SignupContent() {
     const { signup } = useAuth();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -140,5 +140,17 @@ export default function SignupPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function SignupPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-[80vh] flex items-center justify-center bg-[#fcfcfc] dark:bg-gray-900">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1a4d3e]"></div>
+            </div>
+        }>
+            <SignupContent />
+        </Suspense>
     );
 }
